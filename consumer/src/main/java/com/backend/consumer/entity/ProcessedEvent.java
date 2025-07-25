@@ -42,4 +42,12 @@ public class ProcessedEvent {
     private String processingStatus;
 
     private String errorMessage;
+
+    public ProcessedEvent(String eventId, String partitionId, String eventType, String topic, Long offsetValue) {
+        this.eventId = eventId;
+        this.partitionId = partitionId;
+        this.eventType = eventType;
+        this.topic = topic;
+        this.offsetValue = offsetValue;
+    }
 }
