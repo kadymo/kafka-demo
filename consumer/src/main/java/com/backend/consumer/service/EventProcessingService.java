@@ -4,9 +4,13 @@ import com.backend.consumer.entity.ProcessedEvent;
 import com.backend.consumer.repository.ProcessedEventRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
+@Service
+@Transactional
 public class EventProcessingService {
     private final ProcessedEventRepository repository;
     private final Logger logger = LoggerFactory.getLogger(EventProcessingService.class);
