@@ -19,7 +19,7 @@ public class EventProcessingService {
         this.repository = repository;
     }
 
-    private boolean isEventAlreadyProcessed(String eventId) {
+    public boolean isEventAlreadyProcessed(String eventId) {
         boolean exists = repository.existsById(UUID.fromString(eventId));
         if (exists) {
             logger.warn("Event {} is already processed.",  eventId);
@@ -27,7 +27,7 @@ public class EventProcessingService {
         return exists;
     }
 
-    private void markEventAsProcessed(String eventId, String eventType, String topic, String partitionId, Long offset) {
+    public void markEventAsProcessed(String eventId, String eventType, String topic, String partitionId, Long offset) {
         try {
             ProcessedEvent event = new ProcessedEvent(eventId, partitionId, eventType, topic, offset);
             event.setProcessingStatus("SUCCESS");
@@ -38,7 +38,7 @@ public class EventProcessingService {
         }
     }
 
-    private void markEventAsError(String eventId, String eventType, String topic, String partitionId, Long offset, String errorMessage) {
+    public void markEventAsError(String eventId, String eventType, String topic, String partitionId, Long offset, String errorMessage) {
         try {
             ProcessedEvent event = new ProcessedEvent(eventId, partitionId, eventType, topic, offset);
             event.setProcessingStatus("ERROR");
