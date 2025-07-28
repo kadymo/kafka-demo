@@ -86,4 +86,35 @@ public class UserEventListener {
             throw e;
         }
     }
+
+    @KafkaListener(
+            topics = "user-events",
+            groupId = "login-analytics-group",
+            containerFactory = "userEventKafkaListenerContainerFactory"
+    )
+    public void handleLoginEventForAnalytics(@Payload UserEvent userEvent,
+                                             @Header(KafkaHeaders.RECEIVED_TOPIC) String topic,
+                                             @Header(KafkaHeaders.RECEIVED_PARTITION) String partition,
+                                             @Header(KafkaHeaders.OFFSET) long offset,
+                                             Acknowledgment acknowledgment) {
+
+        logger.info("Processing login for analytics: userId={}, timestamp={}", userEvent.getUserId(), userEvent.getTimestamp());
+        try {
+            processLoginAnalytics(userEvent);
+            acknowledgment.acknowledge();
+            logger.info("Analytics processed successfully: {}", userEvent.getUserId());
+        } catch (Exception e) {
+            logger.error("Error while processing login for analytics: {}", e.getMessage(), e);
+            acknowledgment.acknowledge();
+        }
+    }
+
+    private void processLoginAnalytics(UserEvent userEvent) {
+        logger.debug("Updating metrics for user login: {}", userEvent.getUserId());
+        try {
+            Thread.sleep(50);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+    }
 }
